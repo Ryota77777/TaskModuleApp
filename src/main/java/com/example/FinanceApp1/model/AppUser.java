@@ -24,6 +24,7 @@ public class AppUser {
     private String department;
     private String role;
     private LocalDateTime createdAt;
+    private String profileImagePath;
 
     // геттеры и сеттеры
     public Long getId() {
@@ -73,6 +74,14 @@ public class AppUser {
     public String getRole() { return role; }
 
     public void setRole(String role) { this.role = role; }
+
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
 
 }
 

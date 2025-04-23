@@ -6,5 +6,7 @@ import java.util.List;
 public interface UserService {
     List<AppUser> getAllUsers();
     void deleteUserById(Long id);
+    void updateProfileImage(Long userId, String imagePath);
+
 }
 

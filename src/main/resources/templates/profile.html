@@ -65,12 +65,21 @@
     <div class="col-md-8">
       <div class="card shadow p-4">
         <div class="text-center mb-4">
-          <img src="/images/avatar-placeholder.png" alt="Фото профиля" class="profile-img mb-3">
+          <img th:src="${user.profileImagePath} ?: '/images/avatar-placeholder.png'" alt="Фото профиля" class="profile-img mb-3">
           <h3 th:text="${user.fullName} ?: 'Имя Фамилия'">Имя Фамилия</h3>
           <p class="text-muted" th:text="${user.position} ?: 'Должность'">Должность</p>
         </div>
 
         <form th:action="@{/profile/update}" method="post">
+          <div class="mb-3">
+            <label for="profileImage" class="form-label">Фото профиля</label>
+            <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*">
+          </div>
+
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+          </div>
+
           <div class="row mb-3">
             <div class="col">
               <label for="username" class="form-label">Имя пользователя</label>

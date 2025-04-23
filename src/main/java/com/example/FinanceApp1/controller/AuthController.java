@@ -14,8 +14,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
+import java.nio.file.Path;
+import java.nio.file.Files;
+
 
 @Controller
 public class AuthController {
@@ -119,6 +125,7 @@ public class AuthController {
                                 @RequestParam String position,
                                 @RequestParam String phone,
                                 @RequestParam String department,
+                                @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
                                 Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
@@ -136,6 +143,20 @@ public class AuthController {
         user.setPosition(position);
         user.setPhone(phone);
         user.setDepartment(department);
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+            try {
+                String filename = username + "_" + profileImage.getOriginalFilename();
+                Path uploadDir = Paths.get("uploads");
+                Files.createDirectories(uploadDir);
+                Path filePath = uploadDir.resolve(filename);
+                profileImage.transferTo(filePath);
+
+                user.setProfileImagePath("/uploads/" + filename); // сохранить путь для отображения
+            } catch (IOException e) {
+                e.printStackTrace(); // логируй ошибку
+            }
+        }
 
         authService.updateUser(user); // создадим этот метод в сервисе
 

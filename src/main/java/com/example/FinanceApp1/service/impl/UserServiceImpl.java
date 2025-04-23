@@ -25,5 +25,15 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
-}
 
+    @Override
+    public void updateProfileImage(Long userId, String imagePath) {
+        AppUser user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            user.setProfileImagePath(imagePath);
+            userRepository.save(user);
+        }
+
+    }
+
+}
