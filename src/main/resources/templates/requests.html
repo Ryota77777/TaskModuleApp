@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мои заявки</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f4fc;
+    }
+    .navbar-custom {
+      background-color: #6f42c1;
+    }
+    .header {
+      background-color: #6f42c1;
+      padding: 20px;
+      border-radius: 1rem;
+      margin-bottom: 20px;
+    }
+    .header-left h2 {
+      color: white;
+    }
+    .header-right .btn {
+      background-color: #6f42c1;
+      color: white;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      margin-left: 10px;
+    }
+    .header-right .btn:hover {
+      background-color: #5936a2;
+    }
+    .main-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 1rem;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .main-content h3 {
+      color: #6f42c1;
+    }
+
+    /* Стили для заявок */
+    .request-completed {
+      border-left: 5px solid green;
+      background-color: #e6ffee;
+    }
+    .request-inprogress {
+      border-left: 5px solid orange;
+      background-color: #fff8e6;
+    }
+
+    .card-icon {
+      font-size: 1.2rem;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="/home">RequestManager</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/home" th:href="@{/home}">Главная</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/requests" th:href="@{/requests}">Заявки</a></li>
+        <li class="nav-item"><a class="nav-link" href="/manage" th:href="@{/manage}">Управление</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/manage" th:href="@{/manage}">Аналитика</a></li>
+        <li class="nav-item"><a class="nav-link" href="/profile" th:href="@{/profile}">Профиль</a></li>
+        <li class="nav-item"><a class="nav-link text-warning" href="/logout" th:href="@{/logout}">Выход</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <div class="header">
+    <div class="header-left">
+      <h2>Мои заявки</h2>
+    </div>
+  </div>
+
+  <!-- Форма поиска задач по названию (перемещена вверх) -->
+  <form method="get" action="/requests/search/title" class="mb-4">
+    <div class="row g-2">
+      <div class="col-md-8">
+        <input type="text" name="title" class="form-control" placeholder="Поиск по названию" value="" required>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Поиск по названию</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Форма поиска задач по статусу (перемещена вверх) -->
+  <form method="get" action="/requests/search/status" class="mb-4">
+    <div class="row g-2">
+      <div class="col-md-8">
+        <select name="status" class="form-control" required>
+          <option value="">Выберите статус</option>
+          <option value="NEW">Новая</option>
+          <option value="IN_PROGRESS">В процессе</option>
+          <option value="COMPLETED">Завершено</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Поиск по статусу</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="main-content">
+    <h3>Ваши заявки</h3>
+
+    <!-- Проверка на наличие заявок -->
+    <div th:if="${#lists.isEmpty(requests)}">
+      <p>Ничего не найдено</p>
+    </div>
+
+    <!-- Отображение заявок, если они есть -->
+    <div class="row" th:if="${requests != null}" th:each="request : ${requests}">
+      <div class="col-md-12 col-lg-12 mb-3">
+        <div class="card shadow-sm"
+             th:classappend="${#strings.trim(request.status).toLowerCase() == 'выполнено' ? ' request-completed' :
+                      (#strings.trim(request.status).toLowerCase() == 'в процессе' ? ' request-inprogress' : '')}">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${request.title}">Заголовок</h5>
+            <p class="card-text" th:text="${request.description}">Описание заявки</p>
+
+            <!-- Тип заявки -->
+            <p>
+              <strong>Тип заявки:</strong>
+              <select class="form-select" disabled>
+                <option th:selected="${request.type == 'Обслуживание'}">Обслуживание</option>
+                <option th:selected="${request.type == 'Поддержка'}">Поддержка</option>
+                <option th:selected="${request.type == 'Улучшение'}">Улучшение</option>
+                <option th:selected="${request.type == 'Ошибка'}">Ошибка</option>
+                <option th:selected="${request.type == 'Новая функциональность'}">Новая функциональность</option>
+              </select>
+            </p>
+
+            <p><strong>Приоритет:</strong> <span th:text="${request.priority}">Высокий</span></p>
+            <p><strong>Срок:</strong> <span th:text="${request.dueDate}">2025-04-21</span></p>
+            <p><strong>Статус:</strong> <span th:text="${request.status}">Активно</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+

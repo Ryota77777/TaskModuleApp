@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Панель администратора</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      background-color: #f8f4fc;
+    }
+    .navbar-custom {
+      background-color: #6f42c1;
+    }
+    .card {
+      border: none;
+      border-radius: 1rem;
+    }
+    .btn-danger, .btn-primary {
+      border-radius: 0.5rem;
+    }
+    .table thead {
+      background-color: #6f42c1;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#">RequestManager</a>
+    <div class="collapse navbar-collapse justify-content-end">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/" th:href="@{/}">Главная</a></li>
+        <li class="nav-item"><a class="nav-link" href="/requests" th:href="@{/requests}">Задачи</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/admin" th:href="@{/admin}">Управление</a></li>
+        <li class="nav-item"><a class="nav-link" href="/profile" th:href="@{/profile}">Профиль</a></li>
+        <li class="nav-item"><a class="nav-link text-warning" href="/logout" th:href="@{/logout}">Выход</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <!-- Пользователи -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <h2>Пользователи</h2>
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>Имя</th>
+          <th>Email</th>
+          <th>Роль</th>
+          <th>Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+          <td th:text="${user.fullName}">Иван Иванов</td>
+          <td th:text="${user.email}">ivan@example.com</td>
+          <td th:text="${user.role}">Пользователь</td>
+          <td>
+            <form th:action="@{'/admin/deleteUser/' + ${user.id}}" method="post" onsubmit="return confirm('Удалить пользователя?')">
+              <button class="btn btn-sm btn-danger">Удалить</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- Форма добавления пользователя -->
+      <div class="card shadow p-4 mt-4">
+        <h4>Добавить пользователя</h4>
+        <form th:action="@{/admin/addUser}" method="post">
+          <div class="row mb-3">
+            <div class="col">
+              <input type="text" class="form-control" name="fullName" placeholder="ФИО" required>
+            </div>
+            <div class="col">
+              <input type="email" class="form-control" name="email" placeholder="Email" required>
+            </div>
+            <div class="col">
+              <select class="form-select" name="role">
+                <option value="USER">Пользователь</option>
+                <option value="ADMIN">Администратор</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" name="username" placeholder="Имя пользователя" required>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" name="password" placeholder="Пароль" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Создать пользователя</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Задачи -->
+  <div class="row">
+    <div class="col-12">
+      <h2>Задачи</h2>
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>Заголовок</th>
+          <th>Описание</th>
+          <th>Статус</th>
+          <th>Пользователь</th>
+          <th>Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request : ${requests}">
+          <td th:text="${request.title}">Задача</td>
+          <td th:text="${request.description}">Описание</td>
+          <td th:text="${request.status}">Открыта</td>
+          <td th:text="${request.assignedUser.fullName}">Иван Иванов</td>
+          <td>
+            <form th:action="@{'/admin/deleteRequest/' + ${request.id}}" method="post" onsubmit="return confirm('Удалить задачу?')">
+              <button class="btn btn-sm btn-danger">Удалить</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- Форма добавления задачи -->
+      <div class="card shadow p-4 mt-4">
+        <h4>Добавить задачу</h4>
+        <form th:action="@{/admin/addRequest}" method="post">
+          <div class="row mb-3">
+            <div class="col">
+              <input type="text" class="form-control" name="title" placeholder="Заголовок" required>
+            </div>
+            <div class="col">
+              <select class="form-select" name="status">
+                <option value="Открыта">Открыта</option>
+                <option value="В процессе">В процессе</option>
+                <option value="Завершена">Завершена</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control" name="description" placeholder="Описание" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <select class="form-select" name="assignedUserId" required>
+              <option disabled selected value="">Выберите пользователя</option>
+              <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.fullName}">Иван Иванов</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Создать задачу</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+

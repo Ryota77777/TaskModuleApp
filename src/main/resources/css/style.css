@@ -1,0 +1,16 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.btn-primary, .btn-secondary {
+    width: 100%;
+}
+
+.btn-link {
+    text-decoration: none;
+    color: #6c757d;
+}
