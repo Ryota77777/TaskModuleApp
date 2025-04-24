@@ -11,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class RequestController {
@@ -31,7 +33,7 @@ public class RequestController {
     public String userRequests(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = authService.findUserByUsername(auth.getName());
-        model.addAttribute("request", requestService.getRequestsByUser(user));
+        model.addAttribute("requests", requestService.getRequestsByUser(user));
         return "requests";
     }
 
@@ -125,6 +127,31 @@ public class RequestController {
                              @RequestParam String dueDate) {  // И передаем dueDate
         requestService.updateRequest(id, title, description, status, priority, type, dueDate);
         return "redirect:/manage";
+    }
+
+    @GetMapping("/analytics")
+    public String analyticsPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = authService.findUserByUsername(auth.getName());
+
+        // Получение данных для аналитики
+        Map<String, Long> statusDistribution = requestService.getStatusDistribution(user);
+        Map<String, Long> typeDistribution = requestService.getTypeDistribution(user);
+        Map<String, Long> priorityDistribution = requestService.getPriorityDistribution(user);
+        Map<LocalDate, Long> dailyRequestCount = requestService.getDailyRequestCount(user, 30);
+        List<Request> upcomingDueRequests = requestService.getUpcomingDueRequests(user, 7);
+
+        // Преобразуем Map в List для удобства работы в шаблоне
+        model.addAttribute("dailyLabels", new ArrayList<>(dailyRequestCount.keySet()));
+        model.addAttribute("dailyData", new ArrayList<>(dailyRequestCount.values()));
+
+        // Передача других данных в модель
+        model.addAttribute("statusDistribution", statusDistribution);
+        model.addAttribute("typeDistribution", typeDistribution);
+        model.addAttribute("priorityDistribution", priorityDistribution);
+        model.addAttribute("upcomingDueRequests", upcomingDueRequests);
+
+        return "analytics";
     }
 }
 

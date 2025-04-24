@@ -124,6 +124,8 @@ public class Request {
     public void setAssignedUser(AppUser assignedUser) {
         this.assignedUser = assignedUser;
     }
+
+
 }
 
 

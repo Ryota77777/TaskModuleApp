@@ -2,7 +2,10 @@ package com.example.FinanceApp1.service;
 
 import com.example.FinanceApp1.model.AppUser;
 import com.example.FinanceApp1.model.Request;
+
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface RequestService {
     List<Request> getAllRequests();
@@ -20,6 +23,12 @@ public interface RequestService {
 
     // Метод поиска задачи по статусу
     List<Request> searchRequestsByStatus(String status);
+
+    Map<String, Long> getStatusDistribution(AppUser user);
+    Map<String, Long> getTypeDistribution(AppUser user);
+    Map<String, Long> getPriorityDistribution(AppUser user);
+    Map<LocalDate, Long> getDailyRequestCount(AppUser user, int days);
+    List<Request> getUpcomingDueRequests(AppUser user, int days);
 }
 
 

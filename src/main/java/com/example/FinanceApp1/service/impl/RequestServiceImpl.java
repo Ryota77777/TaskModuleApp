@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestServiceImpl implements RequestService {
@@ -96,6 +98,43 @@ public class RequestServiceImpl implements RequestService {
             requestRepository.save(r);
         });
     }
+
+    @Override
+    public Map<String, Long> getStatusDistribution(AppUser user) {
+        return requestRepository.findByAssignedUser(user).stream()
+                .collect(Collectors.groupingBy(Request::getStatus, Collectors.counting()));
+    }
+
+    @Override
+    public Map<String, Long> getTypeDistribution(AppUser user) {
+        return requestRepository.findByAssignedUser(user).stream()
+                .collect(Collectors.groupingBy(r -> r.getType().name(), Collectors.counting()));
+    }
+
+    @Override
+    public Map<String, Long> getPriorityDistribution(AppUser user) {
+        return requestRepository.findByAssignedUser(user).stream()
+                .collect(Collectors.groupingBy(Request::getPriority, Collectors.counting()));
+    }
+
+    @Override
+    public Map<LocalDate, Long> getDailyRequestCount(AppUser user, int days) {
+        LocalDate fromDate = LocalDate.now().minusDays(days);
+        return requestRepository.findByAssignedUser(user).stream()
+                .filter(r -> r.getCreatedDate().isAfter(fromDate))
+                .collect(Collectors.groupingBy(Request::getCreatedDate, Collectors.counting()));
+    }
+
+    @Override
+    public List<Request> getUpcomingDueRequests(AppUser user, int days) {
+        LocalDate today = LocalDate.now();
+        LocalDate limit = today.plusDays(days);
+        return requestRepository.findByAssignedUser(user).stream()
+                .filter(r -> !r.getStatus().equalsIgnoreCase("COMPLETED"))
+                .filter(r -> r.getDueDate() != null && !r.getDueDate().isBefore(today) && !r.getDueDate().isAfter(limit))
+                .collect(Collectors.toList());
+    }
+
 }
 
 
