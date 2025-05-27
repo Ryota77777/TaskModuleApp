@@ -129,6 +129,7 @@ public class RequestController {
         return "redirect:/manage";
     }
 
+
     @GetMapping("/analytics")
     public String analyticsPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

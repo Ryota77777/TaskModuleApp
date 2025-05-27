@@ -18,28 +18,28 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation ('org.springframework.boot:spring-boot-starter-thymeleaf')
+	implementation ('org.springframework.boot:spring-boot-starter-web')
+	implementation ('org.springframework.boot:spring-boot-starter-security')
+	implementation ('org.springframework.boot:spring-boot-starter-data-jpa')
 
 	// PostgreSQL
-	implementation 'org.postgresql:postgresql:42.7.5'
+	implementation ('org.postgresql:postgresql:42.7.5')
 
 	// Jakarta API
-	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
-	implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+	implementation ('jakarta.persistence:jakarta.persistence-api:3.1.0')
+	implementation ('jakarta.servlet:jakarta.servlet-api:6.0.0')
 
 	// Логирование
-	implementation 'org.slf4j:slf4j-api'
-	implementation 'ch.qos.logback:logback-classic'
+	implementation ('org.slf4j:slf4j-api')
+	implementation ('ch.qos.logback:logback-classic')
 
 	// DevTools для разработчиков
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	developmentOnly ('org.springframework.boot:spring-boot-devtools')
 
 	// Тестирование
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation ('org.springframework.boot:spring-boot-starter-test')
+	testRuntimeOnly ('org.junit.platform:junit-platform-launcher')
 }
 
 tasks.named('test') {
