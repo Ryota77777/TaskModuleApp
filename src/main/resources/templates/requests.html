@@ -155,6 +155,12 @@
             <p><strong>Приоритет:</strong> <span th:text="${request.priority}">Высокий</span></p>
             <p><strong>Срок:</strong> <span th:text="${request.dueDate}">2025-04-21</span></p>
             <p><strong>Статус:</strong> <span th:text="${request.status}">Активно</span></p>
+            <!-- Файл (если есть) -->
+            <p th:if="${request.filePath != null}">
+              <strong>Файл:</strong>
+              <a th:href="@{'/download'(path=${request.filePath})}"
+                 th:text="${request.filePath.substring(request.filePath.lastIndexOf('/') + 1)}"></a>
+            </p>
           </div>
         </div>
       </div>

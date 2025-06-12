@@ -137,7 +137,7 @@
     <h3>Создание и поиск заявок</h3>
 
     <!-- Форма добавления заявки -->
-    <form method="post" action="/manage/add" class="mb-4">
+    <form method="post" action="/manage/add" enctype="multipart/form-data" class="mb-4">
       <div class="row g-3">
         <div class="col-md-4">
           <input type="text" name="title" class="form-control" placeholder="Название заявки" required>
@@ -160,6 +160,12 @@
             <option value="NEW_EMPLOYEE_SETUP">Подготовка рабочего места</option>
           </select>
         </div>
+
+        <!-- Поле для загрузки файлов -->
+        <div class="col-md-4">
+          <input type="file" name="file" class="form-control">
+        </div>
+
         <div class="col-md-2">
           <button type="submit" class="btn btn-primary w-100">Добавить</button>
         </div>
@@ -218,6 +224,13 @@
             <p><strong>Дата завершения:</strong> <span th:text="${request.dueDate}">2025-01-01</span></p>
             <p><strong>Назначено:</strong> <span th:text="${request.assignedUser?.username}">user</span></p>
 
+            <p th:if="${request.filePath != null}">
+              <strong>Файл:</strong>
+              <a th:href="@{'/download'(path=${request.filePath})}"
+                 th:text="${request.filePath.substring(request.filePath.lastIndexOf('/') + 1)}"></a>
+            </p>
+
+
             <div class="d-flex gap-3 mt-3">
               <form th:action="@{/manage/complete/{id}(id=${request.id})}" method="post" style="margin: 0;">
                 <button class="btn btn-success btn-sm" th:disabled="${request.status == 'COMPLETED'}">Завершить</button>
@@ -233,8 +246,8 @@
 
           <!-- Форма редактирования заявки (скрыта по умолчанию) -->
           <div class="edit-form mt-3" id="editForm[[${request.id}]]" style="display: none;">
-            <form th:action="@{/manage/edit/{id}(id=${request.id})}" method="post" onsubmit="return prepareEditForm([[${request.id}]])">
-              <div class="mb-3">
+            <form th:action="@{/manage/edit/{id}(id=${request.id})}" method="post" enctype="multipart/form-data" onsubmit="return prepareEditForm([[${request.id}]])">
+            <div class="mb-3">
                 <label for="titleEdit[[${request.id}]]" class="form-label">Название заявки</label>
                 <input type="text" class="form-control" id="titleEdit[[${request.id}]]" name="title" th:value="${request.title}" required>
               </div>
@@ -257,7 +270,11 @@
               </div>
               <div class="mb-3">
                 <label for="dueDateEdit[[${request.id}]]" class="form-label">Дата завершения</label>
-                <input type="date" class="form-control" id="dueDateEdit[[${request.id}]]" name="dueDate" th:value="${request.dueDate}" required>
+                <input type="date" class="form-control"
+                       id="dueDateEdit[[${request.id}]]"
+                       name="dueDate"
+                       th:value="${request.dueDate != null ? request.dueDate : ''}"
+                       required>
               </div>
               <div class="mb-3">
                 <label for="typeEdit[[${request.id}]]" class="form-label">Тип заявки</label>
@@ -268,6 +285,20 @@
                   <option value="SOFTWARE_INSTALL" th:selected="${request.type == 'SOFTWARE_INSTALL'}">Установка/настройка ПО</option>
                   <option value="NEW_EMPLOYEE_SETUP" th:selected="${request.type == 'NEW_EMPLOYEE_SETUP'}">Подготовка рабочего места</option>
                 </select>
+              </div>
+              <div class="mb-3">
+                <label for="fileEdit[[${request.id}]]" class="form-label">Файл</label>
+                <input type="file" class="form-control" id="fileEdit[[${request.id}]]" name="file">
+                <div th:if="${request.filePath != null}">
+                  <small>Текущий файл:
+                    <a th:href="@{'/download'(path=${request.filePath})}"
+                       target="_blank"
+                       th:text="${#strings.substring(request.filePath, request.filePath.lastIndexOf('/') + 1)}">Файл</a>
+                  </small>
+                </div>
+                <div th:if="${request.filePath == null}">
+                  <small>Файл отсутствует</small>
+                </div>
               </div>
               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
               <button type="submit" class="btn btn-primary btn-sm">Сохранить</button>

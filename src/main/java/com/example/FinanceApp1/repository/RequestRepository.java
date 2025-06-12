@@ -1,6 +1,7 @@
 package com.example.FinanceApp1.repository;
 
 import com.example.FinanceApp1.model.Request;
+import com.example.FinanceApp1.model.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import com.example.FinanceApp1.model.AppUser;
@@ -14,5 +15,9 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     // Поиск задач по статусу
     List<Request> findByStatus(String status);
+
+    List<Request> findByAssignedUserRole(UserRole role);
+
+
 
 }

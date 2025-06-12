@@ -4,6 +4,7 @@ import com.example.FinanceApp1.model.AppUser;
 import com.example.FinanceApp1.model.Request;
 import com.example.FinanceApp1.model.RequestType;
 import com.example.FinanceApp1.repository.RequestRepository;
+import com.example.FinanceApp1.repository.UserRepository;
 import com.example.FinanceApp1.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class RequestServiceImpl implements RequestService {
 
     @Autowired
     private RequestRepository requestRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Request> getAllRequests() {
@@ -45,6 +49,7 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.findByAssignedUser(user);
     }
 
+
     @Override
     public Request getRequestById(Long id) {
         Optional<Request> request = requestRepository.findById(id);
@@ -52,24 +57,23 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void createRequest(String title, String description, String priority, String type, String dueDate, AppUser user) {
+    public void createRequest(String title, String description, String priority, String type, String dueDate, AppUser user, String filePath) {
         LocalDate parsedDueDate = LocalDate.parse(dueDate);
         LocalDate createdDate = LocalDate.now();
 
-        // Преобразуем строку типа в enum
         RequestType requestType = RequestType.valueOf(type);
 
-        // Создаём новую заявку
         Request request = new Request(
                 title,
                 description,
-                "NEW", // начальный статус
+                "NEW",
                 priority,
                 requestType,
                 createdDate,
                 parsedDueDate,
-                false, // не подтверждена по умолчанию
-                user
+                false,
+                user,
+                filePath // ← новое поле
         );
 
         requestRepository.save(request);
@@ -85,8 +89,9 @@ public class RequestServiceImpl implements RequestService {
         });
     }
 
+
     @Override
-    public void updateRequest(Long id, String title, String description, String status, String priority, String type, String dueDate) {
+    public void updateRequest(Long id, String title, String description, String status, String priority, String type, String dueDate, String filePath) {
         Optional<Request> request = requestRepository.findById(id);
         request.ifPresent(r -> {
             r.setTitle(title);
@@ -95,6 +100,7 @@ public class RequestServiceImpl implements RequestService {
             r.setPriority(priority);
             r.setType(RequestType.valueOf(type));
             r.setDueDate(LocalDate.parse(dueDate));
+            r.setFilePath(filePath); // ← обновляем путь к файлу
             requestRepository.save(r);
         });
     }
@@ -134,6 +140,26 @@ public class RequestServiceImpl implements RequestService {
                 .filter(r -> r.getDueDate() != null && !r.getDueDate().isBefore(today) && !r.getDueDate().isAfter(limit))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Request> getRequestsByAssignedUser(Long userId) {
+        AppUser user = userRepository.findById(userId).orElse(null);
+        return requestRepository.findByAssignedUser(user);
+    }
+
+    @Override
+    public void changeAssignedUser(Long requestId, Long newUserId) {
+        Request request = requestRepository.findById(requestId).orElseThrow();
+        if (newUserId != null) {
+            AppUser newUser = userRepository.findById(newUserId).orElseThrow();
+            request.setAssignedUser(newUser);
+        } else {
+            request.setAssignedUser(null); // снимаем исполнителя
+        }
+        requestRepository.save(request);
+    }
+
+
 
 }
 

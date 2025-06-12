@@ -22,14 +22,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         AppUser user = userRepository.findByUsername(username);
 
         if (user == null) {
+            System.out.println("Пользователь не найден: " + username);
             throw new UsernameNotFoundException("User not found");
         }
 
-        // Используем стандартный User из Spring Security
+        System.out.println("Найден пользователь: " + username + ", роль: " + user.getRole().name());
+
         return User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole() != null ? user.getRole() : "USER")  // Можно потом делать гибко
+                .authorities("ROLE_" + user.getRole().name())
                 .build();
     }
+
 }

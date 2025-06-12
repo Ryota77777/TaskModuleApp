@@ -178,6 +178,17 @@ public class AuthController {
         SecurityContextHolder.clearContext(); // Очищает текущую сессию
         return "redirect:/login?logout"; // Редирект на страницу логина или на "/"
     }
+
+    @GetMapping("/admin")
+    public String adminPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        AppUser user = authService.findUserByUsername(username);
+        model.addAttribute("user", user);
+        return "admin"; // шаблон admin.html
+    }
+
+
 }
 
 

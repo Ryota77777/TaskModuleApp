@@ -1,10 +1,6 @@
 package com.example.FinanceApp1.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +18,8 @@ public class AppUser {
     private String position;
     private String phone;
     private String department;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
     private LocalDateTime createdAt;
     private String profileImagePath;
 
@@ -71,9 +68,13 @@ public class AppUser {
     public String getDepartment() { return department; }
     public void setDepartment(String department) { this.department = department; }
 
-    public String getRole() { return role; }
+    public UserRole getRole() {
+        return role;
+    }
 
-    public void setRole(String role) { this.role = role; }
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
 
     public String getProfileImagePath() {
         return profileImagePath;

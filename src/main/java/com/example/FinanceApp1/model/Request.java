@@ -25,12 +25,15 @@ public class Request {
     @ManyToOne
     private AppUser assignedUser;
 
+    @Column(name = "file_path")
+    private String filePath;
+
     public Request() {
     }
 
     public Request(String title, String description, String status, String priority,
                    RequestType type, LocalDate createdDate, LocalDate dueDate,
-                   boolean confirmed, AppUser assignedUser) {
+                   boolean confirmed, AppUser assignedUser, String filePath) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -40,6 +43,7 @@ public class Request {
         this.dueDate = dueDate;
         this.confirmed = confirmed;
         this.assignedUser = assignedUser;
+        this.filePath = filePath;
     }
 
     // Геттеры и сеттеры
@@ -124,6 +128,15 @@ public class Request {
     public void setAssignedUser(AppUser assignedUser) {
         this.assignedUser = assignedUser;
     }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
 
 
 }

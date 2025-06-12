@@ -1,6 +1,7 @@
 package com.example.FinanceApp1.service;
 
 import com.example.FinanceApp1.model.AppUser;
+import com.example.FinanceApp1.model.UserRole;
 import com.example.FinanceApp1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AuthService {
@@ -24,6 +26,10 @@ public class AuthService {
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<AppUser> getAllUsers() {
+        return userRepository.findAll();
     }
 
     // Метод для аутентификации пользователя
@@ -53,8 +59,7 @@ public class AuthService {
             newUser.setUsername(username);
             newUser.setPassword(passwordEncoder.encode(password));
             newUser.setEmail(email);
-            newUser.setRole("USER");
-
+            newUser.setRole(UserRole.USER);  // вот так
 
             AppUser savedUser = userRepository.save(newUser);
             logger.info("Пользователь {} успешно зарегистрирован с ID: {}", username, savedUser.getId());
@@ -64,6 +69,7 @@ public class AuthService {
             throw new RuntimeException("Ошибка при регистрации пользователя", e);
         }
     }
+
 
     // Метод для поиска пользователя по имени
     public AppUser findUserByUsername(String username) {
@@ -79,6 +85,19 @@ public class AuthService {
     public void updateUser(AppUser user) {
         userRepository.save(user); // просто перезаписывает юзера
     }
+
+    public AppUser registerAdmin(String username, String password, String email) {
+        AppUser adminUser = new AppUser();
+        adminUser.setUsername(username);
+        adminUser.setPassword(passwordEncoder.encode(password));
+        adminUser.setEmail(email);
+        adminUser.setRole(UserRole.ADMIN); // роль админа
+
+        return userRepository.save(adminUser);
+    }
+
+
+
 }
 
 

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Заявки по исполнителям</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        body {
+          background-color: #f8f4fc;
+        }
+
+        .navbar-custom {
+          background: linear-gradient(135deg, #6a82fb, #fc5c7d);
+        }
+        .navbar-custom .nav-link {
+          color: #fff !important;
+        }
+        .navbar-custom .nav-link:hover {
+          color: #ffd700 !important;
+        }
+
+        .header {
+          background-color: #6f42c1;
+          padding: 20px;
+          border-radius: 1rem;
+          margin-bottom: 20px;
+        }
+        .header h2 {
+          color: white;
+        }
+
+        .main-content {
+          background-color: white;
+          padding: 30px;
+          border-radius: 1rem;
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table th {
+          background-color: #6f42c1;
+          color: white;
+        }
+
+        select.form-select, button.btn {
+          min-width: 150px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Навигационная панель -->
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="#">RequestManager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" href="/home" th:href="@{/home}">Главная</a></li>
+                <li class="nav-item"><a class="nav-link" href="/requests/by-user" th:href="@{/requests/by-user}">Заявки</a></li>
+                <li class="nav-item"><a class="nav-link" href="/manage" th:href="@{/manage}">Управление</a></li>
+                <li class="nav-item"><a class="nav-link" href="/analytics" th:href="@{/analytics}">Аналитика</a></li>
+                <li class="nav-item"><a class="nav-link" href="/profile" th:href="@{/profile}">Профиль</a></li>
+                <li class="nav-item"><a class="nav-link text-warning" href="/logout" th:href="@{/logout}">Выход</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="header mb-4">
+        <h2>Заявки по исполнителям</h2>
+    </div>
+
+    <!-- Фильтр по исполнителю -->
+    <form method="get" action="/requests/by-user" class="mb-4">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <label for="user" class="form-label">Фильтр по исполнителю:</label>
+                <select class="form-select" name="userId" id="user" onchange="this.form.submit()">
+                    <option value="">Все исполнители</option>
+                    <option th:each="user : ${users}"
+                            th:value="${user.id}"
+                            th:text="${user.username}"
+                            th:selected="${selectedUserId == user.id}">
+                    </option>
+                </select>
+            </div>
+        </div>
+    </form>
+
+    <div class="main-content">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead>
+                <tr>
+                    <th>Заголовок</th>
+                    <th>Описание</th>
+                    <th>Статус</th>
+                    <th>Приоритет</th>
+                    <th>Тип</th>
+                    <th>Срок</th>
+                    <th>Исполнитель</th>
+                    <th>Сменить исполнителя</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="request : ${requests}">
+                    <td th:text="${request.title}"></td>
+                    <td th:text="${request.description}"></td>
+                    <td th:text="${request.status}"></td>
+                    <td th:text="${request.priority}"></td>
+                    <td th:text="${request.type}"></td>
+                    <td th:text="${request.dueDate}"></td>
+                    <td th:text="${request.assignedUser != null ? request.assignedUser.username : 'Не назначен'}"></td>
+                    <td>
+                        <form method="post" th:action="@{/requests/change-user}" class="d-flex align-items-center gap-2">
+                            <input type="hidden" name="requestId" th:value="${request.id}" />
+                            <select name="newUserId" class="form-select form-select-sm">
+                                <option value="">Не назначен</option>
+                                <option th:each="user : ${users}"
+                                        th:value="${user.id}"
+                                        th:text="${user.username}"
+                                        th:selected="${request.assignedUser?.id == user.id}">
+                                </option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Сменить</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
