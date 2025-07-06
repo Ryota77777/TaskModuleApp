@@ -52,25 +52,25 @@
 ## Скриншоты
 
 ### Главная страница
-![Скриншот главной страницы](https://github.com/Ryota77777/TaskModuleApp/blob/main/main5.jpg?raw=true)
+![Скриншот главной страницы](https://github.com/Ryota77777/TaskModuleApp/blob/main/uploads/main5.jpg?raw=true)
 
 ### Профиль
-![Скриншот профиля](https://github.com/Ryota77777/TaskModuleApp/blob/main/profile5.jpg?raw=true)
+![Скриншот профиля](https://github.com/Ryota77777/TaskModuleApp/blob/main/uploads/profile5.jpg?raw=true)
 
 ### Заявки
-![Скриншот заявок](https://github.com/Ryota77777/TaskModuleApp/blob/main/schedule.jpg?raw=true)
+![Скриншот заявок](https://github.com/Ryota77777/TaskModuleApp/blob/main/uploads/myrequests5.jpg?raw=true)
 
 ### Управление
-![Скриншот управления заявками](https://github.com/Ryota77777/TaskModuleApp/blob/main/journal.jpg?raw=true)
+![Скриншот управления заявками](https://github.com/Ryota77777/TaskModuleApp/blob/main/uploads/manage5.jpg?raw=true)
 
 ### Аналитика
-![Скриншот аналитики](https://github.com/Ryota77777/TaskModuleApp/blob/main/journal.jpg?raw=true)
+![Скриншот аналитики](https://github.com/Ryota77777/TaskModuleApp/blob/main/uploads/analytics5.jpg?raw=true)
 
 ### Главная страница админа
-![Скриншот главной страницы админа](https://github.com/Ryota77777/TaskModuleApp/blob/main/admin5.jpg?raw=true)
+![Скриншот главной страницы админа](https://github.com/Ryota77777/TaskModuleApp/blob/main/uploads/admin5.jpg?raw=true)
 
 ### Заявки админа
-![Скриншот заявок админа](https://github.com/Ryota77777/TaskModuleApp/blob/main/schedule.jpg?raw=true)
+![Скриншот заявок админа](https://github.com/Ryota77777/TaskModuleApp/blob/main/uploads/requests.jpg?raw=true)
 
 ```
 
