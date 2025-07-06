@@ -68,26 +68,6 @@
 
 ```
 
-## 📁 Структура проекта
-
-```
-TaskModuleApp/
-├── src/main/java/com/example/FinanceApp1/
-│   ├── controller/         // Контроллеры (AuthController, RequestController)
-│   ├── model/              // Модели (AppUser, Request)
-│   ├── service/            // Сервисы (AuthService, RequestService, FileStorageService)
-│   ├── config/             // Конфигурации безопасности и файлов
-├── src/main/resources/
-│   ├── templates/          // HTML-шаблоны (Thymeleaf)
-│   ├── static/             // CSS, JS, изображения
-│   ├── application.properties
-├── uploads/                // Загружаемые пользователями файлы
-├── pom.xml
-└── README.md
-```
-
----
-
 ## ⚙️ Установка и запуск
 
 ### 1. Клонировать репозиторий
