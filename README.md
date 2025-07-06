@@ -72,7 +72,6 @@
 ### Заявки админа
 ![Скриншот заявок админа](https://github.com/Ryota77777/TaskModuleApp/blob/main/uploads/requests.jpg?raw=true)
 
-```
 
 ## ⚙️ Установка и запуск
 
