@@ -51,20 +51,26 @@
 
 ## Скриншоты
 
-### Аунтефикация
-![Скриншот страницы аунтефикации](https://github.com/Ryota77777/ModuleAppDataBase1/blob/main/templates/auth.png?raw=true)
-
 ### Главная страница
-![Скриншот главной страницы](https://github.com/Ryota77777/ModuleAppDataBase1/blob/main/templates/mainy.png?raw=true)
+![Скриншот главной страницы](https://github.com/Ryota77777/TaskModuleApp/blob/main/main5.jpg?raw=true)
 
 ### Профиль
-![Скриншот профиля](https://github.com/Ryota77777/ModuleAppDataBase1/blob/main/templates/profile.png?raw=true)
+![Скриншот профиля](https://github.com/Ryota77777/TaskModuleApp/blob/main/profile5.jpg?raw=true)
 
-### Расписание
-![Скриншот расписания](https://github.com/Ryota77777/ModuleAppDataBase1/blob/main/templates/schedule.png?raw=true)
+### Заявки
+![Скриншот заявок](https://github.com/Ryota77777/TaskModuleApp/blob/main/schedule.jpg?raw=true)
 
-### Журнал
-![Скриншот журнала](https://github.com/Ryota77777/ModuleAppDataBase1/blob/main/templates/journal.png?raw=true)
+### Управление
+![Скриншот управления заявками](https://github.com/Ryota77777/TaskModuleApp/blob/main/journal.jpg?raw=true)
+
+### Аналитика
+![Скриншот аналитики](https://github.com/Ryota77777/TaskModuleApp/blob/main/journal.jpg?raw=true)
+
+### Главная страница админа
+![Скриншот главной страницы админа](https://github.com/Ryota77777/TaskModuleApp/blob/main/admin5.jpg?raw=true)
+
+### Заявки админа
+![Скриншот заявок админа](https://github.com/Ryota77777/TaskModuleApp/blob/main/schedule.jpg?raw=true)
 
 ```
 
